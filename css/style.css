@@ -64,15 +64,14 @@
 
 	p, ul, ol, dl, table, blockquote, form {
 		margin: 0 0 2em 0;
-		line-height: 1.5em;
 	}
 
 	h1, h2, h3, h4, h5, h6 {
 		color: #5b5b5b;
 		font-weight: 700;
 		letter-spacing: 0.125em;
-		line-height: 1em;
-		margin-bottom: .5em;
+		line-height: 1.75em;
+		margin-bottom: 1em;
 		text-transform: uppercase;
 		text-align: center;
 	}
@@ -321,7 +320,7 @@
 			-o-transition: opacity 0.25s ease-in-out;
 			-ms-transition: opacity 0.25s ease-in-out;
 			transition: opacity 0.25s ease-in-out;
-			background-image: url("");
+			background-image: url("images/overlay.png");
 			content: '';
 			display: block;
 			height: 100%;
@@ -660,7 +659,7 @@
 
 		.feature .image {
 			display: inline-block;
-			height: 95%;
+			height: 100%;
 			overflow: hidden;
 			position: relative;
 			width: 50%;
