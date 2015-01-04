@@ -44,13 +44,13 @@
 		-o-transition: color 0.2s ease-in-out, border-bottom-color 0.2s ease-in-out;
 		-ms-transition: color 0.2s ease-in-out, border-bottom-color 0.2s ease-in-out;
 		transition: color 0.2s ease-in-out, border-bottom-color 0.2s ease-in-out;
-		border-bottom: dotted 1px;
+		/*border-bottom: dotted 2px;*/
 		color: #4eb980;
 		text-decoration: none;
 	}
-
 		a:hover {
 			border-bottom-color: transparent;
+			color: #4eb980;
 		}
 
 	strong, b {
