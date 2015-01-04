@@ -116,7 +116,7 @@
 		#header .inner
 		{
 			display: inline-block;
-			vertical-align: middle;
+			vertical-align: top;
 		}
 
 		#header h1
