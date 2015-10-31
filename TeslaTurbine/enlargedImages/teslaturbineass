@@ -1,0 +1,10 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>An example of the body tag</title>
+    <link href="../css/bootstrap.min.css" rel="stylesheet">
+  </head>
+  <body>
+    This is inside the body!
+  </body>
+</html>
