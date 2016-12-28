@@ -325,7 +325,55 @@
                 <div class="col-lg-10 col-lg-offset-1 text-center">
                     <hr class="small">
                     <p class = "lead">
-                    Lol look at everything i know about circuits
+                    Normally circuits are black magic to me but push buttons are pretty straight forward. I started off with normal 4-pronged push buttons. These push buttons are great for working with Arduinos and I had some random ones lying around from old projects. I never remember exactly how to connect push buttons up to Arduinos so I always reference this image straight from the Arduino website. Thanks Arduino!
+                    </p>
+
+                    <div class="row">
+                        <div class="portfolio-item">
+                                <img src="img/buttoncircuit.png" width="450em">
+                                <p><i>https://www.arduino.cc/en/Tutorial/Button</i></p>
+                        </div>
+                    </div>
+
+                    
+                    <p class = "lead">
+                    For my first few tests, I hooked 3 push buttons up to my Teensy to test sending information to Python was working.
+                    </p> 
+
+                    <div class="row">
+                        <div class="portfolio-item">
+                                <img src="img/threebuttons.jpeg" width="450em">
+
+                        </div>
+                    </div>
+
+                    <p class = "lead">
+                    But I didn't want to use push buttons in my final prototype because they are small and don't have a nice <i>click</i> to them. I wanted to use keys off a mechanical keyboard so I borrowed a spare keyboard switch from a friend and attempted to hook it up to my Teensy. Standard keyboard switches have two prongs instead of 4 so I needed to figure out how to connect that type of switch to the Teensy. 
+                    <br><br>
+                    Luckily I found a website tutorial on how to build keyboards which turned out to be exactly what I needed. The <a href = "http://blog.komar.be/how-to-make-a-keyboard-the-matrix/">tutorial</a> is very in-depth and goes into more detail than I needed. The most important piece of information I grabbed from the tutorial was this picture: 
+                    </p>
+
+                    <div class="row">
+                        <div class="portfolio-item">
+                                <img src="img/keycircuit.png" height="450em">
+                                <p><i>http://blog.komar.be/how-to-make-a-keyboard-the-matrix/</i></p>
+                        </div>
+                    </div>
+
+                    <p class = "lead">
+                    This picture showed me how to connect the switch to the Teensy input (A) to the input voltage (VCC) using a resistor (the rectangle). Crazy simple circuit that makes use of a pull-up resistor. Theoretically there's a pull-up resistor built into most Teensy models but I couldn't find any documentation for pull-up resistors in the Teensy-LC board that I have. I would've been nice not to have external resistors in the circuit, but it wasn't the end of the world. 
+                    <br><br>
+                    For my very first test with the keyboard switch, I laid out the circuit on my breadboard and touched jumpers to the exposed terminals of the switch. Since it was a borrowed switch, I didn't want to solder to it. It worked like a charm and I was able to get on-off readings from the Teensy.
+                    </p>
+
+                    <div class="row">
+                        <div class="portfolio-item">
+                                <img src="img/firstkeyswitch.jpeg" width="450em">
+                        </div>
+                    </div>                    
+
+                    <p class = "lead">
+                    So knowing that the keyboard switches would work with my Teensy, I bought 12 switches and caps from MaxKeyboard.com. I chose the <a href = "http://www.maxkeyboard.com/gateron-ks-blue-key-switch-tactile-and-clicky-60g.html">Gateron KS Blue Key Switch</a> because they were $1 each and made a satisfying <i>click</i>. I bought some key caps in the <a href = "http://www.maxkeyboard.com/row-1-size-1x1-cherry-mx-keycap-r1-1x1.html">1x1</a> and <a href = http://www.maxkeyboard.com/row-1-size-1x1.5-cherry-mx-keycap-r1-1x1.5.html>1x1.5</a> size. The whole order (with shipping to Hawaii) was $27.10. 
                     </p>
                     
                     <!-- /.row (nested) -->
