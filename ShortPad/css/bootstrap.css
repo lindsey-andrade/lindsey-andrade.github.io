@@ -229,11 +229,7 @@ th {
   img {
     max-width: 100% !important;
   }
-  p{
-    orphans: 3;
-    widows: 3;
-    size: 2em;
-  }
+  p
   h2,
   h3 {
     orphans: 3;

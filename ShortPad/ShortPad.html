@@ -44,7 +44,16 @@
                 <a href="#top" onclick = $("#menu-close").click(); >Home</a>
             </li>
             <li>
-                <a href="#about" onclick = $("#menu-close").click(); >Projects</a>
+                <a href="#arduino" onclick = $("#menu-close").click(); >Arduino</a>
+            </li>
+            <li>
+                <a href="#circuit" onclick = $("#menu-close").click(); >Circuit</a>
+            </li>
+            <li>
+                <a href="#python" onclick = $("#menu-close").click(); >Python</a>
+            </li>
+            <li>
+                <a href="#meche" onclick = $("#menu-close").click(); >Mechanical Components</a>
             </li>
         </ul>
     </nav>
@@ -374,8 +383,37 @@
 
                     <p class = "lead">
                     So knowing that the keyboard switches would work with my Teensy, I bought 12 switches and caps from MaxKeyboard.com. I chose the <a href = "http://www.maxkeyboard.com/gateron-ks-blue-key-switch-tactile-and-clicky-60g.html">Gateron KS Blue Key Switch</a> because they were $1 each and made a satisfying <i>click</i>. I bought some key caps in the <a href = "http://www.maxkeyboard.com/row-1-size-1x1-cherry-mx-keycap-r1-1x1.html">1x1</a> and <a href = http://www.maxkeyboard.com/row-1-size-1x1.5-cherry-mx-keycap-r1-1x1.5.html>1x1.5</a> size. The whole order (with shipping to Hawaii) was $27.10. 
+                    <br><br>
+                    I hooked all 12 keyboard switches up to my Teensy with some quickly soldered jumpers and tested to make sure each of them worked. Once I confirmed that all of them worked while plugged into the circuit, I soldered them to protoboard. And hooked them up again. 
                     </p>
-                    
+
+                    <div class="row">
+                        <div class="portfolio-item">
+                                <img src="img/twelvekeyswitches.jpeg" width="450em">
+                                <p><i>Pre-protoboard tesing.</i></p>
+                        </div>
+                    </div>
+
+                    <p class = "lead">
+                    My initial breadboard circuit looked like a ECE horror movie so I had to clean it up a bit. I'm using 470 ohm resistors here because I had them on hand and they seem to work fine. 
+                    </p>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="portfolio-item">
+                                    <img src="img/wiringp1.jpeg" height="300em">
+                                    <p><i>The horrible mess of jumper wires.</i></p>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="portfolio-item">
+                                    <img src="img/wiringp2.jpeg" height="300em">
+                                    <p><i>The new, cleaner wiring without the keyboard switch inputs.</i></p>
+                            </div>
+                        </div>
+                    </div>
+                    <p class = "lead">
+                    There is definitely more to be done with this circuit to make it better but I've pushed that aside for now. 
+                    </p>
                     <!-- /.row (nested) -->
                 </div>
                 <!-- /.col-lg-10 -->
@@ -401,8 +439,340 @@
                 <div class="col-lg-10 col-lg-offset-1 text-center">
                     <hr class="small">
                     <p class = "lead">
-                    Damn my python skills are awesome
+                    Let me preface this section by saying once again that I've had essentially no programming training, save a high school class on Java. I've never formally learned Python although I have done a few Codecademy lessons to get me familiar with the syntax. Most of what I know about Python is from Google-ing how to do specific tasks and reading forums. I think that programming in general is really cool because you can throw together blocks of code that other people have written to do things that the original authors never intended. 
+                    <br><br>
+                    Here's the GitHub repo for the entire project. This repo includes most of the packages I use for the project. I use Pyserial and Pywin32 as well and I'm not 100% sure how to find the files for those packages since they had installers when I downloaded them. Obviously I'm still learning how this all works. 
+                    <br><br>
+                    <a href = "https://github.com/lindsey-andrade/shortpad">https://github.com/lindsey-andrade/shortpad</a>
+                    <br><br>
+                    I'll try to break the code down into its main components: 
                     </p>
+                    <hr class="small">
+                    <p class = "lead">
+                    1. Reading Serial
+                    <br><br>
+                    Pyserial is fairly easy to set up. I was a mechanical engineer on a piano playing robot project a few years ago and the magical software engineers used Pyserial to communicate with our Arduino. I knew it was totally possible but I had never done it myself. 
+                    <br><br>
+                    Pyserial requires a few lines of setup code that sets the baudrate and port number and then opens and clears the serial buffer. Once you've done all that, you can just a readline() command to get the incoming serial message. 
+                    </p>
+                    
+                    <div class = "text-left">
+<!-- HTML generated using hilite.me -->
+<div style="background: #ffffff; overflow:auto;width:auto;border:solid gray;border-width:.1em .1em .1em .8em;padding:.2em .6em;"><pre style="margin: 0; line-height: 125%">ser <span style="color: #333333">=</span> serial<span style="color: #333333">.</span>Serial()
+ser<span style="color: #333333">.</span>setPort(<span style="background-color: #fff0f0">&#39;COM5&#39;</span>)
+ser<span style="color: #333333">.</span>baudrate <span style="color: #333333">=</span> <span style="color: #0000DD; font-weight: bold">9600</span>
+ser<span style="color: #333333">.</span>open() 
+ser<span style="color: #333333">.</span>flushInput()
+ser<span style="color: #333333">.</span>flushOutput()
+
+new <span style="color: #333333">=</span> <span style="color: #007020">str</span>(ser<span style="color: #333333">.</span>readline())
+</pre></div>
+                    </div>
+                    
+                    <p class = "lead">
+                    <br><br>
+                    You'd think that printing 'Hello World' from an Arduino would output as 'Hello World' in Python but it's definitely not the case. I'm outputting two strings from the Arduino code on each line, the button number and its state. I'm doing strings because I have 12 buttons and want to label them 01, 02, ..., 12 and integers strip the leading zero when I print them. So the outputs when I look at them in the Arduino Serial interface look like this: 
+                    </p>
+
+                    <div class = "text-left">
+<!-- HTML generated using hilite.me -->
+<div style="background: #ffffff; overflow:auto;width:auto;border:solid gray;border-width:.1em .1em .1em .8em;padding:.2em .6em;"><pre style="margin: 0; line-height: 125%"><span style="color: #888888">011</span>
+<span style="color: #888888">021</span>
+<span style="color: #888888">031</span>
+<span style="color: #888888">041</span>
+<span style="color: #888888">051</span>
+<span style="color: #888888">061</span>
+<span style="color: #888888">071</span>
+<span style="color: #888888">081</span>
+<span style="color: #888888">091</span>
+<span style="color: #888888">101</span>
+<span style="color: #888888">111</span>
+<span style="color: #888888">121</span>
+</pre></div>
+                    </div>
+
+                    <p class = "lead">
+                    <br><br>
+                    But if you print the Serial output from Python, it looks like this: 
+                    </p>
+
+                    <div class = "text-left">
+<!-- HTML generated using hilite.me -->
+<div style="background: #ffffff; overflow:auto;width:auto;border:solid gray;border-width:.1em .1em .1em .8em;padding:.2em .6em;"><pre style="margin: 0; line-height: 125%"><span style="color: #888888">b&#39;011\r\n&#39;</span>
+<span style="color: #888888">b&#39;021\r\n&#39;</span>
+<span style="color: #888888">b&#39;031\r\n&#39;</span>
+<span style="color: #888888">b&#39;041\r\n&#39;</span>
+<span style="color: #888888">b&#39;051\r\n&#39;</span>
+<span style="color: #888888">b&#39;061\r\n&#39;</span>
+<span style="color: #888888">b&#39;071\r\n&#39;</span>
+<span style="color: #888888">b&#39;081\r\n&#39;</span>
+<span style="color: #888888">b&#39;091\r\n&#39;</span>
+<span style="color: #888888">b&#39;101\r\n&#39;</span>
+<span style="color: #888888">b&#39;111\r\n&#39;</span>
+<span style="color: #888888">b&#39;121\r\n&#39;</span>
+</pre></div>
+                    </div>
+
+                    <p class = "lead">
+                    <br><br>
+                    So that's annoying. I have to do some substring commands in Python to pull the button number and state out of each line of serial and convert it to an integer. Once I do that, I can set the states to the correct buttons.
+                    <br><br>
+                    Now I always know the current state of the button - whether it is being pushed or not pushed. 
+                    </p>
+
+                    <hr class="small">
+                    <p class = "lead">
+                    2. Know the Active Window
+                    <br><br>
+                    The cool thing about this setup is that the button commands can change depending on what application you're working it and it happens as soon as you switch windows. You could be working in Photoshop and Adobe Illustrator at the same time and want to use the Lasso tool in both. Well in Photoshop the default key command is "L" and in Illustrator it is "Q"... super useful, I know. So you want to switch back and forth between Photoshop and Illustrator and keep the Lasso tool the same in each program. You don't want to have to manually switch you key commands every time you switch programs so this little section of code will help do it for you. 
+                    <br><br>
+                    I downloaded Pywin32 to use some really cool Windows functionality. Pywin32 has the win32gui package in it and you can use win32gui to control active windows, keyboard clicks, and mouse clicks. You can just pretend you're a human with win32gui so that's awesome. 
+                    <br><br>
+                    <a href = "http://stackoverflow.com/questions/2090464/python-window-activation">This person "luc" on StackOverflow</a> has a pretty awesome block of code that showed me how to get the names of active windows and set them to the foreground so that my key commands will always work on the top most window. 
+                    <br><br>
+                    Through a lot of testing, I found that sometimes you need the full window name and sometimes you only need a small section of it. For example, Chrome tabs need the full name "Messenger - Google Chrome" but Solidworks need this <i>wildcard handle thing</i> that looks like ".*SOLIDWORKS Education Edition .*" which doesn't include the specific file you're working in like this: SOLIDWORKS Education Edition - Instructional Use Only - [Part1]. It's super weird and I have no idea why it does this but when I finally figured out that this was the reason commands weren't sending to certain windows it was definitely a relief. 
+                    <br><br>
+                    Here's the code for my sentToActiveWindow() function. It's a weird mix of functions from the StackOverflow code and functions straight from win32gui. The main thing is that it works and returns the full window name so I can play with it later. 
+
+                    <div class = "text-left">
+<!-- HTML generated using hilite.me --><div style="background: #ffffff; overflow:auto;width:auto;border:solid gray;border-width:.1em .1em .1em .8em;padding:.2em .6em;"><pre style="margin: 0; line-height: 125%"><span style="color: #008800; font-weight: bold">from</span> <span style="color: #0e84b5; font-weight: bold">packages.windowswitch</span> <span style="color: #008800; font-weight: bold">import</span> WindowMgr
+<span style="color: #008800; font-weight: bold">from</span> <span style="color: #0e84b5; font-weight: bold">win32gui</span> <span style="color: #008800; font-weight: bold">import</span> GetWindowText, GetForegroundWindow
+
+<span style="color: #008800; font-weight: bold">def</span> <span style="color: #0066BB; font-weight: bold">sendToActiveWindow</span>():
+        full_window_name <span style="color: #333333">=</span> GetWindowText(GetForegroundWindow()) <span style="color: #888888">#only acts on active window</span>
+        <span style="color: #888888">#don&#39;t try this code on the python source while it&#39;s running. it hates it</span>
+        window_title <span style="color: #333333">=</span> full_window_name<span style="color: #333333">.</span>split(<span style="background-color: #fff0f0">&#39;-&#39;</span>)[<span style="color: #0000DD; font-weight: bold">0</span>]
+        wildcard <span style="color: #333333">=</span> <span style="background-color: #fff0f0">&quot;.*&quot;</span> <span style="color: #333333">+</span> window_title <span style="color: #333333">+</span> <span style="background-color: #fff0f0">&quot;.*&quot;</span>
+        
+        <span style="color: #888888"># this if loop is to make it not possible to type in the Python Shell</span>
+        <span style="color: #008800; font-weight: bold">if</span> full_window_name <span style="color: #333333">!=</span> <span style="background-color: #fff0f0">&quot;*Python 3.4.3 Shell*&quot;</span>:
+                <span style="color: #DD4422">&quot;&quot;&quot;</span>
+<span style="color: #DD4422">                the following try/except is to get around a weird error when </span>
+<span style="color: #DD4422">                switching between multiple window. some full window names would </span>
+<span style="color: #DD4422">                not work when put into set_foreground() but some would. either</span>
+<span style="color: #DD4422">                it uses the full name of a window (ie &quot;Messenger - Google Chrome&quot;)</span>
+<span style="color: #DD4422">                or it uses just the first part (ie &quot;Messenger &quot;) to call the window</span>
+<span style="color: #DD4422">                forward. it tries the full name first and if that doesn&#39;t work it&#39;ll</span>
+<span style="color: #DD4422">                try the shortened name. unsure why it does this and unsure if this is</span>
+<span style="color: #DD4422">                the best solution. </span>
+<span style="color: #DD4422">                &quot;&quot;&quot;</span>
+                <span style="color: #008800; font-weight: bold">try</span>:
+                        w <span style="color: #333333">=</span> WindowMgr()
+                        w<span style="color: #333333">.</span>find_window_wildcard(full_window_name)
+                        w<span style="color: #333333">.</span>set_foreground()
+                <span style="color: #008800; font-weight: bold">except</span>:                    
+                        w <span style="color: #333333">=</span> WindowMgr()
+                        w<span style="color: #333333">.</span>find_window_wildcard(wildcard)
+                        w<span style="color: #333333">.</span>set_foreground()
+                
+        <span style="color: #008800; font-weight: bold">else</span>:
+                <span style="color: #007020">print</span>(<span style="background-color: #fff0f0">&#39;Do not push the button in this window&#39;</span>)
+
+        <span style="color: #008800; font-weight: bold">return</span> full_window_name
+</pre></div>
+                   
+                    </div>
+                    <hr class = "small">
+
+                    <p class = "lead">
+                    3. Knowing When a Button is Pushed
+                    <br><br>
+                    So button states are always coming into Python and Python is always reading the new thing that the Arduino code sends it. Most of the time, the buttons are all at their open "1" state. Kinda boring for Python to always be reading 1s. To tell when a button is pushed, I use an <b>old</b> and <b>new</b> state for each button. Lets just look at button #1 for now. 
+                    <br><br>
+                    I initialize button #1 with a "1" because that's the open, unpressed state of the button. This is the <b>old</b> value. When Python is reading the serial outputs, it assigns the state coming in for button #1 as <b>new</b>. Most of the time, <b>new = 1</b> because the button still isn't pressed. But when <b>new = 0</b>, I know that the button is being pushed down. But if I just had a loop that checked if <b>new == 0</b>, then if you hold a button down you'll continue that loop too many times. So I check if <b>new</b> and <b>old</b> are different (if <b>new != old</b>:) to tell when the button is going from its unpushed to pushed state. This is will also trigger the condition when the button goes from the pushed to unpushed state so I throw in another condition: that <b>new == 0</b> to only get the pressing of the button, not the release. 
+                    <br><br>
+                    I use this little bit of code whenever I need to know when to trigger another command when a button is pushed: 
+                    </p>
+
+                    <div class = "text-left">
+
+<!-- HTML generated using hilite.me --><div style="background: #ffffff; overflow:auto;width:auto;border:solid gray;border-width:.1em .1em .1em .8em;padding:.2em .6em;"><pre style="margin: 0; line-height: 125%"><span style="color: #008800; font-weight: bold">if</span> old <span style="color: #333333">!=</span> new:
+    old <span style="color: #333333">=</span> new
+    <span style="color: #008800; font-weight: bold">if</span> new <span style="color: #333333">==</span> <span style="color: #0000DD; font-weight: bold">0</span>:
+        <span style="color: #888888"># put button code here</span>
+</pre></div>
+                    </div>
+
+                    <hr class = "small">
+                    <p class = "lead">
+                    4. Modifier Keys
+                    <br><br>
+                    Modifier keys are used all the time on normal keyboards. They can be press-and-hold style modifiers like Shift or Ctrl or can be toggle switches like NumLock or CapsLock. Toggles are nice because they actually change what the keys function is while the modifier key is on. 
+                    <br><br>
+                    I bought 12 keys: nine 1x1s and three 1x1.5s. So I've got three keys that are about the size of a Ctrl key on most keyboards and nine that are the normal letter key size. I'll use the three larger ones a modifiers and leave the other nine for the keyboard commands. 
+                    <br><br>
+                    Nine keys really isn't that much when it comes to programs like Solidworks. My most common keyboard shortcuts are:
+                    </p>
+                    
+                    <div class = "text-left">
+                    <ol>
+                        <li class = "lead">
+                            Boss Extrude
+                        </li>
+                        <li class = "lead">
+                            Cut Extrude
+                        </li>
+                        <li class = "lead">
+                            Zoom to Fit
+                        </li>
+                        <li class = "lead">
+                            Measure
+                        </li>
+                        <li class = "lead">
+                            Normal To
+                        </li>
+                        <li class = "lead">
+                            Create a Reference Plane
+                        </li>
+                        <li class = "lead">
+                            View/Hide Origins
+                        </li>
+                        <li class = "lead">
+                            View/Hide Planes
+                        </li>
+                        <li class = "lead">
+                            View/Hide Sketches
+                        </li>
+                        <li class = "lead">
+                            View/Hide Sketch Relations
+                        </li>
+                        <li class = "lead">
+                            Equations
+                        </li>
+                    </ol>
+                    </div>
+                    
+                    <p class = "lead">
+                    I also use the cut/copy/paste commands a lot and hit the ESC key every few clicks. So I've got at least 15 individual commands that I like to use in Solidworks and that means I'll definitely need the modifier keys to allow me to have the same keys give me different commands. 
+                    <br><br>
+                    I've decided to keep one modifier key different from the others. The point of my little project is to have all my keyboard commands on a small keyboard so I don't need my hand on my real keyboard. That means I need a few keys like Shift or Ctrl to help me make selections. I've chosen to make one of my modifiers a Shift key because I use that key a lot in Solidworks (my primary program if you couldn't tell). 
+                    <br><br>
+                    So I've got two modifier keys acting as toggles and one acting as a press-and-hold. I can do a number of combinations with the toggle keys but I've restricted it to three: all of them off, one of them on, the other one on. So only one toggle can be on at a time or they can all be off. Sure I could make it so if both of them on I get another modifier state but I figured that would get a little confusing for me. 
+                    <br><br>
+                    The code for the modifier keys isn't that complicated or interesting so I wont show it here. But the really cool part (at least I think its cool) is how the buttons "know" which commands to use depending on the active modifier. And I'll talk about that next. 
+                    </p>
+
+                    <hr class = "small">
+                    <p class = "lead">
+                    5. Command Buttons
+                    <br><br>
+                    So before I get into how the buttons "know" which command to chose, I'll talk about how the commands actually get sent from Python to whatever window is active. I use another chunk of code from someone on the Internet (https://gist.github.com/chriskiehl/2906125) to utilize the win32gui/win32api (I'm not actually sure where the difference is between these two packages, I think they're packaged together) to send keyboard strokes on command. I've stuck this entire code into its own file in my packages and just reference it in my main code.
+                    <br><br>
+                    I use pressAndHold() and release() for the Shift key, pressHoldRelease() for any key combination like "Ctrl+Z", and typer() for everything else. Definitely take a look at this person's code, it's really well done. 
+                    <br><br>
+                    So how do I connect buttons with specific key commands? I used a simple text document that contains the button number, program name, and key for each shortcut I want. The file looks something like this: 
+                    </p>
+
+<div class = 'text-left'>
+<!-- HTML generated using hilite.me --><div style="background: #ffffff; overflow:auto;width:auto;border:solid gray;border-width:.1em .1em .1em .8em;padding:.2em .6em;"><pre style="margin: 0; line-height: 125%">4, &#39;SOLIDWORKS&#39;, &#39;b&#39;
+5, &#39;SOLIDWORKS&#39;, &#39;c&#39;
+6, &#39;SOLIDWORKS&#39;, &#39;n&#39;
+7, &#39;SOLIDWORKS&#39;, &#39;m&#39;
+8, &#39;SOLIDWORKS&#39;, &#39;f&#39;
+9, &#39;SOLIDWORKS&#39;, &#39;g&#39;
+10, &#39;SOLIDWORKS&#39;, &#39;ctrl+z&#39;
+11, &#39;SOLIDWORKS&#39;, &#39;ctrl+s&#39;
+12, &#39;SOLIDWORKS&#39;, &#39;esc&#39;
+</pre></div>
+</div>
+
+                    <p class = "lead">
+                    <br><br>
+                    Why do I start at 4 instead of 1? That's because I named the modifier buttons 1-3 before thinking and it's a lot of work to change it around. 
+                    <br><br>
+                    So first, I need to know what program I'm pulling key commands for and this is where my sentToActiveWindow() function comes in handy. The sendToActiveWindow() function returns the active window name so I can pull out all the lines of the text document that match up with the active program. I make a temporary array to store only the button numbers and key commands that are associated active window. 
+                    </p>
+
+<div class = 'text-left'>
+<!-- HTML generated using hilite.me --><div style="background: #ffffff; overflow:auto;width:auto;border:solid gray;border-width:.1em .1em .1em .8em;padding:.2em .6em;"><pre style="margin: 0; line-height: 125%"><span style="color: #008800; font-weight: bold">for</span> line <span style="color: #000000; font-weight: bold">in</span> ProgramCommands:
+        <span style="color: #888888"># pull out the program to test against the active window</span>
+        program <span style="color: #333333">=</span> line[<span style="color: #0000DD; font-weight: bold">1</span>]<span style="color: #333333">.</span>replace(<span style="background-color: #fff0f0">&quot;</span><span style="color: #666666; font-weight: bold; background-color: #fff0f0">\&#39;</span><span style="background-color: #fff0f0">&quot;</span>, <span style="background-color: #fff0f0">&quot;&quot;</span>)
+        program <span style="color: #333333">=</span> <span style="color: #007020">str</span>(program<span style="color: #333333">.</span>replace(<span style="background-color: #fff0f0">&quot;,&quot;</span>, <span style="background-color: #fff0f0">&quot;&quot;</span>))
+        
+        <span style="color: #008800; font-weight: bold">if</span> program <span style="color: #000000; font-weight: bold">in</span> activeWindowName:
+                <span style="color: #888888"># pull out the button and keys from the lines</span>
+                <span style="color: #888888"># the correct program</span>
+                button <span style="color: #333333">=</span> <span style="color: #007020">int</span>(line[<span style="color: #0000DD; font-weight: bold">0</span>]<span style="color: #333333">.</span>replace(<span style="background-color: #fff0f0">&quot;,&quot;</span>, <span style="background-color: #fff0f0">&quot;&quot;</span>))
+                key <span style="color: #333333">=</span> line[<span style="color: #0000DD; font-weight: bold">2</span>]<span style="color: #333333">.</span>replace(<span style="background-color: #fff0f0">&quot;</span><span style="color: #666666; font-weight: bold; background-color: #fff0f0">\&#39;</span><span style="background-color: #fff0f0">&quot;</span>, <span style="background-color: #fff0f0">&quot;&quot;</span>)
+                
+                <span style="color: #888888"># create a temporary array to store only the commands</span>
+                <span style="color: #888888"># for the active window</span>
+                temp_array<span style="color: #333333">.</span>append([button, program, key])
+</pre></div>
+</div>
+
+                    <p class = "lead">
+                    <br><br>
+                    Once I have an array of only commands that apply to the active window, I can search for the correct button number and then press the key that matches the button number. But before I do that, I apply the modifier keys. 
+                    <br><br>
+                    Now I could have a 4th column in my text document that says which modifier state each command applies to. But that's just extra searching and it takes a lot of time to write and execute. So I'll just add more buttons (kind of). If none of the modifier keys are pressed [0, 0], the button number in the text document will correspond directly to the button being pushed. But if the first modifier button is pressed [1, 0], I'll add 20 to the button number being pressed and search for that in my text document. If the second modifier is pressed [0, 1], I'll add 40 to the button number being pressed and search for that in my text document. 
+                    <br><br>
+                    So my text document now can look like this: 
+                    </p>
+
+<div class = "text-left">
+<!-- HTML generated using hilite.me --><div style="background: #ffffff; overflow:auto;width:auto;border:solid gray;border-width:.1em .1em .1em .8em;padding:.2em .6em;"><pre style="margin: 0; line-height: 125%">4, &#39;SOLIDWORKS&#39;, &#39;b&#39;
+5, &#39;SOLIDWORKS&#39;, &#39;c&#39;
+6, &#39;SOLIDWORKS&#39;, &#39;n&#39;
+7, &#39;SOLIDWORKS&#39;, &#39;m&#39;
+8, &#39;SOLIDWORKS&#39;, &#39;f&#39;
+9, &#39;SOLIDWORKS&#39;, &#39;g&#39;
+10, &#39;SOLIDWORKS&#39;, &#39;&#39;
+11, &#39;SOLIDWORKS&#39;, &#39;&#39;
+12, &#39;SOLIDWORKS&#39;, &#39;esc&#39;
+24, &#39;SOLIDWORKS&#39;, &#39;ctrl+s&#39;
+25, &#39;SOLIDWORKS&#39;, &#39;ctrl+n&#39;
+26, &#39;SOLIDWORKS&#39;, &#39;ctrl+tab&#39;
+27, &#39;SOLIDWORKS&#39;, &#39;ctrl+x&#39;
+28, &#39;SOLIDWORKS&#39;, &#39;ctrl+c&#39;
+29, &#39;SOLIDWORKS&#39;, &#39;ctrl+v&#39;
+30, &#39;SOLIDWORKS&#39;, &#39;ctrl+z&#39;
+31, &#39;SOLIDWORKS&#39;, &#39;&#39;
+32, &#39;SOLIDWORKS&#39;, &#39;&#39;
+44, &#39;SOLIDWORKS&#39;, &#39;shift+t&#39;
+45, &#39;SOLIDWORKS&#39;, &#39;shift+p&#39;
+46, &#39;SOLIDWORKS&#39;, &#39;shift+o&#39;
+47, &#39;SOLIDWORKS&#39;, &#39;&#39;
+48, &#39;SOLIDWORKS&#39;, &#39;&#39;
+49, &#39;SOLIDWORKS&#39;, &#39;&#39;
+50, &#39;SOLIDWORKS&#39;, &#39;&#39;
+51, &#39;SOLIDWORKS&#39;, &#39;&#39;
+52, &#39;SOLIDWORKS&#39;, &#39;&#39;
+</pre></div>
+</div>
+
+                    <p class = "lead">
+                    <br><br>
+                    I don't blame you if you can't see exactly what is happening here. I have three ranges of button numbers: 4-12, 24-32, and 44-52. These ranges correspond to the three states possible with the modifier keys. Is it confusing that my initial button states are 4-12 instead of 1-9? Yes. Is it worth changing? Probably. Will I? Maybe.
+                    <br><br>
+                    The code to actually search for the button numbers and actually type them looks something like this: 
+                    </p>
+
+<div class = "text-left">
+<!-- HTML generated using hilite.me --><div style="background: #ffffff; overflow:auto;width:auto;border:solid gray;border-width:.1em .1em .1em .8em;padding:.2em .6em;"><pre style="margin: 0; line-height: 125%"><span style="color: #008800; font-weight: bold">if</span> modkeyA <span style="color: #333333">==</span> <span style="color: #0000DD; font-weight: bold">1</span>:
+        button_num <span style="color: #333333">=</span> button_num <span style="color: #333333">+</span> <span style="color: #0000DD; font-weight: bold">20</span>
+<span style="color: #008800; font-weight: bold">elif</span> modkeyB <span style="color: #333333">==</span> <span style="color: #0000DD; font-weight: bold">1</span>:
+        button_num <span style="color: #333333">=</span> button_num <span style="color: #333333">+</span> <span style="color: #0000DD; font-weight: bold">40</span>
+                
+<span style="color: #008800; font-weight: bold">for</span> line <span style="color: #000000; font-weight: bold">in</span> temp_array:
+        <span style="color: #008800; font-weight: bold">if</span> line[<span style="color: #0000DD; font-weight: bold">0</span>] <span style="color: #333333">==</span> button_num:
+                key <span style="color: #333333">=</span> line[<span style="color: #0000DD; font-weight: bold">2</span>]
+                <span style="color: #008800; font-weight: bold">if</span> <span style="background-color: #fff0f0">&#39;+&#39;</span> <span style="color: #000000; font-weight: bold">in</span> key:
+                        keys <span style="color: #333333">=</span> key<span style="color: #333333">.</span>split(<span style="background-color: #fff0f0">&#39;+&#39;</span>)
+                        pressHoldRelease(keys[<span style="color: #0000DD; font-weight: bold">0</span>], keys[<span style="color: #0000DD; font-weight: bold">1</span>])
+                        <span style="color: #007020">print</span>(button_num, key)
+                <span style="color: #008800; font-weight: bold">elif</span> key <span style="color: #333333">==</span> <span style="background-color: #fff0f0">&#39;esc&#39;</span>: <span style="color: #888888">#lol it tries to type &quot;esc&quot;</span>
+                        press(<span style="background-color: #fff0f0">&#39;esc&#39;</span>)
+                <span style="color: #008800; font-weight: bold">else</span>:
+                        typer(key)
+</pre></div>
+</div>
+
+                    <p class = "lead">
+                    <br><br>
+                    And that's pretty much it. I recommend looking in my GitHub to actually see how this all comes together but that's where the magic happens!
+                    </p>
+
                     <!-- /.row (nested) -->
                 </div>
                 <!-- /.col-lg-10 -->
