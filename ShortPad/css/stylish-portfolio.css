@@ -192,48 +192,48 @@ hr.small {
     -o-background-size: cover;
 }
 
-.nyan {
+.circuit {
     display: table;
     width: 100%;
     height: 400px;
     color: #fff;
-    background: url(../img/NyanCat/Splash.png) no-repeat center center scroll;
+    background: url(../img/greenbanner.jpg) no-repeat center center scroll;
     -webkit-background-size: cover;
     -moz-background-size: cover;
     background-size: cover;
     -o-background-size: cover;
 }
 
-.gears {
+.arduino {
     display: table;
     width: 100%;
     height: 400px;
     color: #fff;
-    background: url(../img/Gearbox/cover.jpg) no-repeat center center scroll;
+    background: url(../img/bluebanner.jpg) no-repeat center center scroll;
     -webkit-background-size: cover;
     -moz-background-size: cover;
     background-size: cover;
     -o-background-size: cover;
 }
 
-.stormy {
+.python {
     display: table;
     width: 100%;
     height: 400px;
     color: #fff;
-    background: url(../img/SSS/9.JPG) no-repeat center center scroll;
+    background: url(../img/pinkbanner.jpg) no-repeat center center scroll;
     -webkit-background-size: cover;
     -moz-background-size: cover;
     background-size: cover;
     -o-background-size: cover;
 }
 
-.engine {
+.meche {
     display: table;
     width: 100%;
     height: 400px;
     color: #fff;
-    background: url(../img/Engine/EngineInternals.JPG) no-repeat center center scroll;
+    background: url(../img/redbanner.jpg) no-repeat center center scroll;
     -webkit-background-size: cover;
     -moz-background-size: cover;
     background-size: cover;
