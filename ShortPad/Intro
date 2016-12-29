@@ -1,0 +1,192 @@
+Intro
+
+The idea ShortPad project really began in the summer of 2015 when I had to switch from Solidworks to Fusion 360 for a project done with Autodesk. Fusion 360 was still new and had a lot of quirks. It was so different from Solidworks that I felt like all my skills working with CAD (Computer Aided Design) had been thrown out the window. Solidworks allows for custom keyboard shortcuts and mouse gestures to easily access features, views, and additional tools but Fusion 360 had (and still has) preset keyboard shortcuts and mouse gestures that cannot be changed by the user. The result of this was that my CAD'ing speed feel drastically and I never felt comfortable in Fusion 360. 
+<br><br>
+Fusion 360 has definitely improved over the last few years and I've used it for many projects since 2015. But I'm still slower in Fusion 360 than in Solidworks mainly because I still use Solidworks as my primary CAD software. The keyboard shortcuts that I depend on so heavily in Solidworks really slow me down in Fusion 360. I really want to have the same keyboard shortcuts in both programs so I can switch between the two easily. 
+<br><br>
+Que the idea for ShortPad - a programmable keyboard that would send keyboard commands to any program. <a href = "http://www.artlebedev.com/optimus/popularis/" target = "blank">Many</a>, <a href = "http://www.instructables.com/id/Making-a-powerful-programmable-keypad-for-less-tha/" target = "blank">many</a>, <a href = "http://xkeys.com/xkeys/xk24.php" target = "blank">many</a> people and companies have already created programmable keyboards that send key commands to programs. Most of these keyboards are marketed towards graphic designers using a single program with set keyboard shortcuts (ex. Photoshop, Illustrator, essentially all Adobe products) but aren't meant to be switched between applications. The ones that can update the key commands between applications are unreasonably expensive and some of the static, single program keyboards break the bank as well. 
+<br><br>
+I wanted a programmable shortcut keyboard that would allow me to switch between open applications and change the shortcuts appropriately. I wanted to be able to switch between Fusion 360 and Solidworks and use the same key for extrudes, new planes, measuring, and normal to. I wanted to be able to switch between Solidworks and Photoshop without reprogramming the entire keyboard. I wanted simple features that no one else was offering for an affordable price. 
+<br><br>
+Now, I'm a Mechanical Engineer by training and the only formal programming class I've had was AP Computer Science in high school 4 years ago. I've also had some introduction to circuit classes and a brief tutorial for Arduino. What I'm saying is that I'm not at all qualified to do this correctly. ¯\_(ツ)_/¯ Oh well. Let's get started!
+
+--Arduino
+
+Arduinos are so awesome when you have no idea what you're doing. I've been using a Teensy-LC because they're $17 on <a href = "https://smile.amazon.com/PJRC-Teensy-LC/dp/B00VAZDRJ0/ref=sr_1_1?ie=UTF8&qid=1482892309&sr=8-1&keywords=teensy-lc">Amazon Prime</a> or $11.65 off <a href = "https://www.pjrc.com/store/teensylc.html">Teensy's website!</a> It's also a 32-bit microcontroller compared to the 8-bit Arduino Uno. I don't think I'm using the full 32-bit capabilities in this project but it's cheaper and smaller so that's what I bought. Arduino is open source so there are lots of copycat boards that can run the Arduino code with a huge range of prices and features. With Teensy, there are a few extra setup steps to follow to uplaod Arduino code to the board but it's a one-time thing. You can follow the steps to upload code to Teensy boards <a href = "https://www.pjrc.com/teensy/first_use.html">here.</a> 
+
+<pic = teensylc_front.jpg>
+
+The Teensy-LC board doesn't have header pins on the board which is great for some projects but I want to use a breadboard for prototyping so I soldered some header pins to the board. 
+
+<pic = teensy with headers... >
+
+Connecting buttons to Arduinos are super easy. There's even an example program called "Button.ino" in Arduino program. I wanted 12 buttons attached to the Teensy for the ShortPad and I needed to know what the state of the buttons were at all times. Using the Serial functions of Arduino, I print each of the buttons' states to the serial port. Once the information is printed to Serial, the Arduino code doesn't need to do anything else - all logic and fanciness is done with Python later. 
+
+Below is the code I'm currently running on my Teensy-LC to read the button inputs for the ShortPad. It's not pretty and it's probably not finished. Like I said, I'm not a programmer by training. 
+
+--Circuit
+
+Normally circuits are black magic to me but push buttons are pretty straight forward. I started off with normal 4-pronged push buttons. These push buttons are great for working with Arduinos and I had some random ones lying around from old projects. I never remember exactly how to connect push buttons up to Arduinos so I always reference this image straight from the Arduino website. Thanks Arduino!
+
+<pic = buttoncircuit.png>
+
+For my first few tests, I hooked 3 push buttons up to my Teensy to test sending information to Python was working. 
+
+<pic = threebuttons.jpeg>
+
+But I didn't want to use push buttons in my final prototype because they are small and don't have a nice <i>click</i> to them. I wanted to use keys off a mechanical keyboard so I borrowed a spare keyboard switch from a friend and attempted to hook it up to my Teensy. Standard keyboard switches have two prongs instead of 4 so I needed to figure out how to connect that type of switch to the Teensy. 
+
+Luckily I found a website tutorial on how to build keyboards which turned out to be exactly what I needed. The <a href = "http://blog.komar.be/how-to-make-a-keyboard-the-matrix/">tutorial</a> is very in-depth and goes into more detail than I needed. The most important piece of information I grabbed from the tutorial was this picture: 
+
+<pic = keycircuit.png>
+
+This picture showed me how to connect the switch to the Teensy input (A) to the input voltage (VCC) using a resistor (the rectangle). Crazy simple circuit that makes use of a pull-up resistor. Theoretically there's a pull-up resistor built into most Teensy models but I couldn't find any documentation for pull-up resistors in the Teensy-LC board that I have. I would've been nice not to have external resistors in the circuit, but it wasn't the end of the world. 
+
+For my very first test with the keyboard switch, I laid out the circuit on my breadboard and touched jumpers to the exposed terminals of the switch. Since it was a borrowed switch, I didn't want to solder to it. It worked like a charm and I was able to get on-off readings from the Teensy.
+
+<pic = firstkeyswitch.jpeg>
+
+So knowing that the keyboard switches would work with my Teensy, I bought 12 switches and caps from MaxKeyboard.com. I chose the <a href = "http://www.maxkeyboard.com/gateron-ks-blue-key-switch-tactile-and-clicky-60g.html">Gateron KS Blue Key Switch</a> because they were $1 each and made a satisfying <i>click</i>. I bought some key caps in the <a href = "http://www.maxkeyboard.com/row-1-size-1x1-cherry-mx-keycap-r1-1x1.html">1x1</a> and <a href = http://www.maxkeyboard.com/row-1-size-1x1.5-cherry-mx-keycap-r1-1x1.5.html>1x1.5</a> size. The whole order (with shipping to Hawaii) was $27.10. 
+
+I hooked all 12 keyboard switches up to my Teensy with some quickly soldered jumpers and tested to make sure each of them worked. Once I confirmed that all of them worked while plugged into the circuit, I soldered them to protoboard. And hooked them up again. 
+
+<pic = twelvekeyswitches.jpeg> Pre-protoboard testing. 
+
+My initial breadboard circuit looked like a ECE horror movie so I had to clean it up a bit. I'm using 470 ohm resistors here because I had them on hand ¯\_(ツ)_/¯. 
+
+<pic = wiringp1.jpeg> The horrible mess of jumper wires. 
+<pic = wiringp2.jpeg> The new, cleaner wiring without the keyboard switch inputs. 
+
+There is definitely more to be done with this circuit to make it better but I've pushed that aside for now. 
+
+--Python
+
+Let me preface this section by saying once again that I've had essentially no programming training, save a high school class on Java. I've never formally learned Python although I have done a few Codecademy lessons to get me familiar with the syntax. Most of what I know about Python is from Google-ing how to do specific tasks and reading forums. I think that programming in general is really cool because you can throw together blocks of code that other people have written to do things that the original authors never intended. 
+
+Here's the GitHub repo for the entire project. This repo includes most of the packages I use for the project. I use Pyserial and Pywin32 as well and I'm not 100% sure how to find the files for those packages since they had installers when I downloaded them. Obviously I'm still learning how this all works. 
+
+https://github.com/lindsey-andrade/shortpad
+
+I'll try to break the code down into its main components: 
+------
+1. Reading Serial
+
+Pyserial is fairly easy to set up. I was a mechanical engineer on a piano playing robot project a few years ago and the magical software engineers used Pyserial to communicate with our Arduino. I knew it was totally possible but I had never done it myself. 
+
+Pyserial requires a few lines of setup code that sets the baudrate and port number and then opens and clears the serial buffer. Once you've done all that, you can just a readline() command to get the incoming serial message. 
+
+<serial code>
+
+You'd think that printing 'Hello World' from an Arduino would output as 'Hello World' in Python but it's definitely not the case. I'm outputting two strings from the Arduino code on each line, the button number and its state. I'm doing strings because I have 12 buttons and want to label them 01, 02, ..., 12 and integers strip the leading zero when I print them. So the outputs when I look at them in the Arduino Serial interface look like this: 
+
+<serial output>
+
+But if you print the Serial output from Python, it looks like this: 
+
+<serial input>
+
+So that's annoying. I have to do some substring commands in Python to pull the button number and state out of each line of serial and convert it to an integer. Once I do that, I can set the states to the correct buttons.
+
+Now I always know the current state of the button - whether it is being pushed or not pushed. 
+------
+2. Know the Active Window
+
+The cool thing about this setup is that the button commands can change depending on what application you're working it and it happens as soon as you switch windows. You could be working in Photoshop and Adobe Illustrator at the same time and want to use the Lasso tool in both. Well in Photoshop the default key command is "L" and in Illustrator it is "Q"... super useful, I know. So you want to switch back and forth between Photoshop and Illustrator and keep the Lasso tool the same in each program. You don't want to have to manually switch you key commands every time you switch programs so this little section of code will help do it for you. 
+
+I downloaded Pywin32 to use some really cool Windows functionality. Pywin32 has the win32gui package in it and you can use win32gui to control active windows, keyboard clicks, and mouse clicks. You can just pretend you're a human with win32gui so that's awesome. 
+
+<a href = "http://stackoverflow.com/questions/2090464/python-window-activation">This person "luc" on StackOverflow</a> has a pretty awesome block of code that showed me how to get the names of active windows and set them to the foreground so that my key commands will always work on the top most window. 
+
+Through a lot of testing, I found that sometimes you need the full window name and sometimes you only need a small section of it. For example, Chrome tabs need the full name "Messenger - Google Chrome" but Solidworks need this <i>wildcard handle thing</i> that looks like ".*SOLIDWORKS Education Edition .*" which doesn't include the specific file you're working in like this: SOLIDWORKS Education Edition - Instructional Use Only - [Part1]. It's super weird and I have no idea why it does this but when I finally figured out that this was the reason commands weren't sending to certain windows it was definitely a relief. 
+
+Here's the code for my sentToActiveWindow() function. It's a weird mix of functions from the StackOverflow code and functions straight from win32gui. The main thing is that it works and returns the full window name so I can play with it later. 
+
+<sendToActiveWindow code>
+------
+3. Knowing When a Button is Pushed
+
+So button states are always coming into Python and Python is always reading the new thing that the Arduino code sends it. Most of the time, the buttons are all at their open "1" state. Kinda boring for Python to always be reading 1s. To tell when a button is pushed, I use an "old" and "new" state for each button. Lets just look at button #1 for now. 
+
+I initialize button #1 with a "1" because that's the open, unpressed state of the button. This is the "old" value. When Python is reading the serial outputs, it assigns the state coming in for button #1 as "new". Most of the time, new = 1 because the button still isn't pressed. But when new = 0, I know that the button is being pushed down. But if I just had a loop that checked if new == 0, then if you hold a button down you'll continue that loop too many times. So I check if new and old are different (if new != old:) to tell when the button is going from its unpushed to pushed state. This is will also trigger the condition when the button goes from the pushed to unpushed state so I throw in another condition: that new == 0 to only get the pressing of the button, not the release. 
+
+I use this little bit of code whenever I need to know when to trigger another command when a button is pushed: 
+
+<old != new code>
+------
+4. Modifier Keys
+
+Modifier keys are used all the time on normal keyboards. They can be press-and-hold style modifiers like Shift or Ctrl or can be toggle switches like NumLock or CapsLock. Toggles are nice because they actually change what the keys function is while the modifier key is on. 
+
+I bought 12 keys: nine 1x1s and three 1x1.5s. So I've got three keys that are about the size of a Ctrl key on most keyboards and nine that are the normal letter key size. I'll use the three larger ones a modifiers and leave the other nine for the keyboard commands. 
+
+Nine keys really isn't that much when it comes to programs like Solidworks. My most common keyboard shortcuts are:
+
+- Boss Extrude
+- Cut Extrude
+- Zoom to Fit
+- Measure
+- Normal To
+- Create a Reference Plane
+- View/Hide Origins
+- View/Hide Planes
+- View/Hide Sketches
+- View/Hide Sketch Relations
+- Equations
+
+I also use the cut/copy/paste commands a lot and hit the ESC key every few clicks. So I've got at least 15 individual commands that I like to use in Solidworks and that means I'll definitely need the modifier keys to allow me to have the same keys give me different commands. 
+
+I've decided to keep one modifier key different from the others. The point of my little project is to have all my keyboard commands on a small keyboard so I don't need my hand on my real keyboard. That means I need a few keys like Shift or Ctrl to help me make selections. I've chosen to make one of my modifiers a Shift key because I use that key a lot in Solidworks (my primary program if you couldn't tell). 
+
+So I've got two modifier keys acting as toggles and one acting as a press-and-hold. I can do a number of combinations with the toggle keys but I've restricted it to three: all of them off, one of them on, the other one on. So only one toggle can be on at a time or they can all be off. Sure I could make it so if both of them on I get another modifier state but I figured that would get a little confusing for me. 
+
+The code for the modifier keys isn't that complicated or interesting so I wont show it here. But the really cool part (at least I think its cool) is how the buttons "know" which commands to use depending on the active modifier. And I'll talk about that next. 
+------
+5. Command Buttons
+
+So before I get into how the buttons "know" which command to chose, I'll talk about how the commands actually get sent from Python to whatever window is active. I use another chunk of code from someone on the Internet (https://gist.github.com/chriskiehl/2906125) to utilize the win32gui/win32api (I'm not actually sure where the difference is between these two packages, I think they're packaged together) to send keyboard strokes on command. I've stuck this entire code into its own file in my packages and just reference it in my main code.
+
+I use pressAndHold() and release() for the Shift key, pressHoldRelease() for any key combination like "Ctrl+Z", and typer() for everything else. Definitely take a look at this person's code, it's really well done. 
+
+So how do I connect buttons with specific key commands? I used a simple text document that contains the button number, program name, and key for each shortcut I want. The file looks something like this: 
+
+<textfile1>
+
+Why do I start at 4 instead of 1? That's because I named the modifier buttons 1-3 before thinking and it's a lot of work to change it around. 
+
+So first, I need to know what program I'm pulling key commands for and this is where my sentToActiveWindow() function comes in handy. The sendToActiveWindow() function returns the active window name so I can pull out all the lines of the text document that match up with the active program. I make a temporary array to store only the button numbers and key commands that are associated active window. 
+
+<programcommands>
+
+Once I have an array of only commands that apply to the active window, I can search for the correct button number and then press the key that matches the button number. But before I do that, I apply the modifier keys. 
+
+Now I could have a 4th column in my text document that says which modifier state each command applies to. But that's just extra searching and it takes a lot of time to write and execute. So I'll just add more buttons (kind of). If none of the modifier keys are pressed [0, 0], the button number in the text document will correspond directly to the button being pushed. But if the first modifier button is pressed [1, 0], I'll add 20 to the button number being pressed and search for that in my text document. If the second modifier is pressed [0, 1], I'll add 40 to the button number being pressed and search for that in my text document. 
+
+So my text document now can look like this: 
+
+<textfile2>
+
+I don't blame you if you can't see exactly what is happening here. I have three ranges of button numbers: 4-12, 24-32, and 44-52. These ranges correspond to the three states possible with the modifier keys. Is it confusing that my initial button states are 4-12 instead of 1-9? Yes. Is it worth changing? Probably. Will I? Maybe.
+
+The code to actually search for the button numbers and actually type them looks something like this: 
+
+<typercode>
+
+And that's pretty much it. I recommend looking in my GitHub to actually see how this all comes together but that's where the magic happens!
+
+--Mechanical Components
+
+Alright, here's the section that I'm actually trained to talk about. Unfortunately, I've been working on this project while at home and I'm having a difficult time prototyping with the resources I have. So I've made do without 3D printers or the full machine shop at Olin and I've created something that, well... is really just a cardboard box. 
+
+I needed a way to hold the buttons together to sort of resemble a keypad. So I cut squares out of a piece of cardboard and pushed the keys through. 
+
+<pic = cardboardp1.jpeg>
+
+I folded the cardboard to make a box and just attached my breadboard with rubber bands. Hey, it works. 
+
+<pic = cardboardp2_1.jpeg>
+<pic = cardboardp2_2.jpeg>
+<pic = cardboardp2_3.jpeg> 
+
+The small piece of cardboard over the breadboard is to prevent the wires from the buttons pulling out at the odd angle. You can also see that I haven't put the key caps on the switches yet because the spacing between the switches is just a touch too small and the key caps catch on each other.
+
+The cool thing is that I am currently using this set up to create CAD for a 3D printed prototype. Once I have access to a 3D printer, I'll be able to make a few prototypes to test what the best configuration of buttons is! So stay tuned. 

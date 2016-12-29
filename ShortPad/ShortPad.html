@@ -51,6 +51,23 @@
             </li>
             <li>
                 <a href="#python" onclick = $("#menu-close").click(); >Python</a>
+                <ul>
+                    <li>
+                        <a href="#1" onclick = $("#menu-close").click(); >1. Reading Serial</a>
+                    </li>
+                    <li>
+                        <a href="#2" onclick = $("#menu-close").click(); >2. Know the Active Window</a>
+                    </li>
+                    <li>
+                        <a href="#3" onclick = $("#menu-close").click(); >3. Knowing When a Button is Pushed</a>
+                    </li>
+                    <li>
+                        <a href="#4" onclick = $("#menu-close").click(); >4. Modifier Keys</a>
+                    </li>
+                    <li>
+                        <a href="#5" onclick = $("#menu-close").click(); >5. Command Buttons</a>
+                    </li>
+                </ul>
             </li>
             <li>
                 <a href="#meche" onclick = $("#menu-close").click(); >Mechanical Components</a>
@@ -110,7 +127,7 @@
                                     <strong>Arduino</strong>
                                 </h4>
                                 <p>Lots of button pushes and Serial commands</p>
-                                <a href="#arduino" class="btn btn-light">See Project</a>
+                                <a href="#arduino" class="btn btn-light">Read</a>
                             </div>
                         </div>
                         <div class="col-md-3 col-sm-6">
@@ -119,7 +136,7 @@
                                     <strong>Circuit</strong>
                                 </h4>
                                 <p>Wiring up so many buttons<br><br></p>
-                                <a href="#circuit" class="btn btn-light">See Project</a>
+                                <a href="#circuit" class="btn btn-light">Read</a>
                             </div>
                         </div>
                         <div class="col-md-3 col-sm-6">
@@ -128,7 +145,7 @@
                                     <strong>Python</strong>
                                 </h4>
                                 <p>Doing something useful with Serial commands</p>
-                                <a href="#python" class="btn btn-light">See Project</a>
+                                <a href="#python" class="btn btn-light">Read</a>
                             </div>
                         </div>
                         <div class="col-md-3 col-sm-6">
@@ -137,7 +154,7 @@
                                     <strong>Mechanical Components</strong>
                                 </h4>
                                 <p>Holding it all together<br><br></p>
-                                <a href="#meche" class="btn btn-light">See Project</a>
+                                <a href="#meche" class="btn btn-light">Read</a>
                             
                             </div>
                         </div>
@@ -296,19 +313,6 @@
 </pre></div>
                     </div>
 
-
-
-
-
-
-
-
-
-
-
-
-
-
                     <!-- /.row (nested) -->
                 </div>
                 <!-- /.col-lg-10 -->
@@ -447,13 +451,15 @@
                     <br><br>
                     I'll try to break the code down into its main components: 
                     </p>
+
+                    <section id = "1">
                     <hr class="small">
                     <p class = "lead">
-                    1. Reading Serial
+                    <b>1. Reading Serial</b>
                     <br><br>
-                    Pyserial is fairly easy to set up. I was a mechanical engineer on a piano playing robot project a few years ago and the magical software engineers used Pyserial to communicate with our Arduino. I knew it was totally possible but I had never done it myself. 
+                    Pyserial is fairly easy to set up. I was a mechanical engineer on a <a href = "http://poe.olin.edu/poe2014/pianobot/" target = "blank">piano playing robot project </a> a few years ago and the magical software engineers used Pyserial to communicate with our Arduino. I knew it was totally possible but I had never done it myself. 
                     <br><br>
-                    Pyserial requires a few lines of setup code that sets the baudrate and port number and then opens and clears the serial buffer. Once you've done all that, you can just a readline() command to get the incoming serial message. 
+                    Pyserial requires a few lines of setup code that sets the baudrate and port number and then opens and clears the serial buffer. Once you've done all that, you can just use a readline() command to get the incoming serial message. 
                     </p>
                     
                     <div class = "text-left">
@@ -519,20 +525,23 @@ new <span style="color: #333333">=</span> <span style="color: #007020">str</span
                     <br><br>
                     Now I always know the current state of the button - whether it is being pushed or not pushed. 
                     </p>
+                    </section>
 
+                    <section id = "2">
                     <hr class="small">
                     <p class = "lead">
-                    2. Know the Active Window
+                    <b>2. Know the Active Window</b>
                     <br><br>
                     The cool thing about this setup is that the button commands can change depending on what application you're working it and it happens as soon as you switch windows. You could be working in Photoshop and Adobe Illustrator at the same time and want to use the Lasso tool in both. Well in Photoshop the default key command is "L" and in Illustrator it is "Q"... super useful, I know. So you want to switch back and forth between Photoshop and Illustrator and keep the Lasso tool the same in each program. You don't want to have to manually switch you key commands every time you switch programs so this little section of code will help do it for you. 
                     <br><br>
-                    I downloaded Pywin32 to use some really cool Windows functionality. Pywin32 has the win32gui package in it and you can use win32gui to control active windows, keyboard clicks, and mouse clicks. You can just pretend you're a human with win32gui so that's awesome. 
+                    I downloaded Pywin32 to use some really cool Windows functionality. Pywin32 has the win32gui package in it and which you can use to control active windows.
                     <br><br>
-                    <a href = "http://stackoverflow.com/questions/2090464/python-window-activation">This person "luc" on StackOverflow</a> has a pretty awesome block of code that showed me how to get the names of active windows and set them to the foreground so that my key commands will always work on the top most window. 
+                    <a href = "http://stackoverflow.com/questions/2090464/python-window-activation" target = "blank">This person "luc" on StackOverflow</a> has a pretty awesome block of code that showed me how to get the names of active windows and set them to the foreground so that my key commands will always work on the top most window. 
                     <br><br>
                     Through a lot of testing, I found that sometimes you need the full window name and sometimes you only need a small section of it. For example, Chrome tabs need the full name "Messenger - Google Chrome" but Solidworks need this <i>wildcard handle thing</i> that looks like ".*SOLIDWORKS Education Edition .*" which doesn't include the specific file you're working in like this: SOLIDWORKS Education Edition - Instructional Use Only - [Part1]. It's super weird and I have no idea why it does this but when I finally figured out that this was the reason commands weren't sending to certain windows it was definitely a relief. 
                     <br><br>
                     Here's the code for my sentToActiveWindow() function. It's a weird mix of functions from the StackOverflow code and functions straight from win32gui. The main thing is that it works and returns the full window name so I can play with it later. 
+                    </p>
 
                     <div class = "text-left">
 <!-- HTML generated using hilite.me --><div style="background: #ffffff; overflow:auto;width:auto;border:solid gray;border-width:.1em .1em .1em .8em;padding:.2em .6em;"><pre style="margin: 0; line-height: 125%"><span style="color: #008800; font-weight: bold">from</span> <span style="color: #0e84b5; font-weight: bold">packages.windowswitch</span> <span style="color: #008800; font-weight: bold">import</span> WindowMgr
@@ -572,14 +581,16 @@ new <span style="color: #333333">=</span> <span style="color: #007020">str</span
 </pre></div>
                    
                     </div>
-                    <hr class = "small">
+                    </section>
 
+                    <section id = "3">
+                    <hr class = "small">
                     <p class = "lead">
-                    3. Knowing When a Button is Pushed
+                    <b>3. Knowing When a Button is Pushed</b>
                     <br><br>
                     So button states are always coming into Python and Python is always reading the new thing that the Arduino code sends it. Most of the time, the buttons are all at their open "1" state. Kinda boring for Python to always be reading 1s. To tell when a button is pushed, I use an <b>old</b> and <b>new</b> state for each button. Lets just look at button #1 for now. 
                     <br><br>
-                    I initialize button #1 with a "1" because that's the open, unpressed state of the button. This is the <b>old</b> value. When Python is reading the serial outputs, it assigns the state coming in for button #1 as <b>new</b>. Most of the time, <b>new = 1</b> because the button still isn't pressed. But when <b>new = 0</b>, I know that the button is being pushed down. But if I just had a loop that checked if <b>new == 0</b>, then if you hold a button down you'll continue that loop too many times. So I check if <b>new</b> and <b>old</b> are different (if <b>new != old</b>:) to tell when the button is going from its unpushed to pushed state. This is will also trigger the condition when the button goes from the pushed to unpushed state so I throw in another condition: that <b>new == 0</b> to only get the pressing of the button, not the release. 
+                    I initialize button #1 with a "1" because that's the open, unpressed state of the button. This is the <b>old</b> value. When Python is reading the serial outputs, it assigns the state coming in for button #1 as <b>new</b>. Most of the time, <b>new = 1</b> because the button still isn't pressed. But when <b>new = 0</b>, I know that the button is being pushed down. But if I just had a loop that checked if <b>new == 0</b>, then if you hold a button down you'll continue that loop too many times. So I check if <b>new</b> and <b>old</b> are different (if <b>new != old</b>:) to tell when the button is going from its unpushed to pushed state. Once I know that the button state has changed, I can set the <b>old</b> value to the <b>new</b> value to make sure I don't miss the next change. This change will also trigger the condition when the button goes from the pushed to unpushed state so I throw in another condition: that <b>new == 0</b> to only get the pressing of the button, not the release. 
                     <br><br>
                     I use this little bit of code whenever I need to know when to trigger another command when a button is pushed: 
                     </p>
@@ -592,10 +603,12 @@ new <span style="color: #333333">=</span> <span style="color: #007020">str</span
         <span style="color: #888888"># put button code here</span>
 </pre></div>
                     </div>
+                    </section>
 
+                    <section id = "4">
                     <hr class = "small">
                     <p class = "lead">
-                    4. Modifier Keys
+                    <b>4. Modifier Keys</b>
                     <br><br>
                     Modifier keys are used all the time on normal keyboards. They can be press-and-hold style modifiers like Shift or Ctrl or can be toggle switches like NumLock or CapsLock. Toggles are nice because they actually change what the keys function is while the modifier key is on. 
                     <br><br>
@@ -645,18 +658,20 @@ new <span style="color: #333333">=</span> <span style="color: #007020">str</span
                     <p class = "lead">
                     I also use the cut/copy/paste commands a lot and hit the ESC key every few clicks. So I've got at least 15 individual commands that I like to use in Solidworks and that means I'll definitely need the modifier keys to allow me to have the same keys give me different commands. 
                     <br><br>
-                    I've decided to keep one modifier key different from the others. The point of my little project is to have all my keyboard commands on a small keyboard so I don't need my hand on my real keyboard. That means I need a few keys like Shift or Ctrl to help me make selections. I've chosen to make one of my modifiers a Shift key because I use that key a lot in Solidworks (my primary program if you couldn't tell). 
+                    I've decided to keep one modifier key different from the others. The point of my little project is to have all my keyboard commands on a small keyboard so I don't need my left hand on my real keyboard. That means I need a few keys like Shift or Ctrl to help me make selections. I've chosen to make one of my modifiers a Shift key because I use that key a lot in Solidworks (my primary program if you couldn't tell). 
                     <br><br>
                     So I've got two modifier keys acting as toggles and one acting as a press-and-hold. I can do a number of combinations with the toggle keys but I've restricted it to three: all of them off, one of them on, the other one on. So only one toggle can be on at a time or they can all be off. Sure I could make it so if both of them on I get another modifier state but I figured that would get a little confusing for me. 
                     <br><br>
                     The code for the modifier keys isn't that complicated or interesting so I wont show it here. But the really cool part (at least I think its cool) is how the buttons "know" which commands to use depending on the active modifier. And I'll talk about that next. 
                     </p>
+                    </section>
 
+                    <section id = "5">
                     <hr class = "small">
                     <p class = "lead">
-                    5. Command Buttons
+                    <b>5. Command Buttons</b>
                     <br><br>
-                    So before I get into how the buttons "know" which command to chose, I'll talk about how the commands actually get sent from Python to whatever window is active. I use another chunk of code from someone on the Internet (https://gist.github.com/chriskiehl/2906125) to utilize the win32gui/win32api (I'm not actually sure where the difference is between these two packages, I think they're packaged together) to send keyboard strokes on command. I've stuck this entire code into its own file in my packages and just reference it in my main code.
+                    So before I get into how the buttons "know" which command to chose, I'll talk about how the commands actually get sent from Python to whatever window is active. I use another chunk of code from <a href = "https://gist.github.com/chriskiehl/2906125" target = "blank">someone on the Internet</a> to utilize the win32gui/win32api (I'm not actually sure where the difference is between these two packages, I think they're packaged together in Pywin32) to send keyboard strokes on command. I've stuck this entire code into its own file in my packages and just reference it in my main code.
                     <br><br>
                     I use pressAndHold() and release() for the Shift key, pressHoldRelease() for any key combination like "Ctrl+Z", and typer() for everything else. Definitely take a look at this person's code, it's really well done. 
                     <br><br>
@@ -680,7 +695,7 @@ new <span style="color: #333333">=</span> <span style="color: #007020">str</span
                     <br><br>
                     Why do I start at 4 instead of 1? That's because I named the modifier buttons 1-3 before thinking and it's a lot of work to change it around. 
                     <br><br>
-                    So first, I need to know what program I'm pulling key commands for and this is where my sentToActiveWindow() function comes in handy. The sendToActiveWindow() function returns the active window name so I can pull out all the lines of the text document that match up with the active program. I make a temporary array to store only the button numbers and key commands that are associated active window. 
+                    So first, I need to know what program I'm pulling key commands for and this is where my sendToActiveWindow() function comes in handy. The sendToActiveWindow() function returns the active window name so I can pull out all the lines of the text document that match up with the active program. I make a temporary array to store only the button numbers and key commands that are associated active window. 
                     </p>
 
 <div class = 'text-left'>
@@ -772,6 +787,7 @@ new <span style="color: #333333">=</span> <span style="color: #007020">str</span
                     <br><br>
                     And that's pretty much it. I recommend looking in my GitHub to actually see how this all comes together but that's where the magic happens!
                     </p>
+                    </section>
 
                     <!-- /.row (nested) -->
                 </div>
@@ -798,7 +814,44 @@ new <span style="color: #333333">=</span> <span style="color: #007020">str</span
                 <div class="col-lg-10 col-lg-offset-1 text-center">
                     <hr class="small">
                     <p class = "lead">
-                    Wow I actually know what I'm talking about here.
+                    Alright, here's the section that I'm actually trained to talk about. Unfortunately, I've been working on this project while at home and I'm having a difficult time prototyping with the resources I have. So I've made do without 3D printers or the full machine shop at Olin and I've created something that, well... is really just a cardboard box. 
+                    <br><br>
+                    I needed a way to hold the buttons together to sort of resemble a keypad. So I cut squares out of a piece of cardboard and pushed the keys through. 
+                    </p>
+
+                    <div class = "row">
+                        <div class = "portfolio-item">
+                            <img src="img/cardboardp1.jpeg" width="450em">
+                        </div>
+                    </div>
+
+                    <p class = "lead">
+                    I folded the cardboard to make a box and just attached my breadboard with rubber bands. Hey, it works. 
+                    </p>
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="portfolio-item">
+                                    <img src="img/cardboardp2_3.jpeg" height="350em">
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="portfolio-item">
+                                    <img src="img/cardboardp2_2.jpeg" height="350em">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class = "row">
+                        <div class = "portfolio-item">
+                            <img src="img/cardboardp2_1.jpeg" width="400em">
+                        </div>
+                    </div>
+
+                    <p class = "lead">
+                    The small piece of cardboard over the breadboard is to prevent the wires from the buttons pulling out at the odd angle. You can also see that I haven't put the key caps on the switches yet because the spacing between the switches is just a touch too small and the key caps catch on each other.
+                    <br><br>
+                    The cool thing is that I am currently using this set up to create CAD for a 3D printed prototype. Once I have access to a 3D printer, I'll be able to make a few prototypes to test what the best configuration of buttons is! So stay tuned. 
                     </p>
 
                     <!-- /.row (nested) -->
